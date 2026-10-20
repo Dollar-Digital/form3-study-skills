@@ -9,17 +9,17 @@
 <style>
 :root{
   --navy:#152944; --page:#F7F9FC; --card:#FFFFFF; --ink:#152944; --muted:#4F6280;
-  --rule:#D8E0EA; --gold:#3BB7DD; --orange:#F5842D; --on-navy:#F7F9FC; --on-navy-muted:#AFC0D6; --tick:#152944;
+  --rule:#D8E0EA; --gold:#3BB7DD; --orange:#F5842D; --on-navy:#F7F9FC; --on-navy-muted:#AFC0D6; --tick:#152944; --tint:#E3F4FA;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --page:#08203F; --card:#0F2E57; --ink:#EEF2F8; --muted:#AFC0D6; --rule:#24467A; --tick:#3BB7DD;
+    --page:#08203F; --card:#0F2E57; --ink:#EEF2F8; --muted:#AFC0D6; --rule:#24467A; --tick:#3BB7DD; --tint:#12365F;
   }
 }
 :root[data-theme="dark"]{
-  --page:#08203F; --card:#0F2E57; --ink:#EEF2F8; --muted:#AFC0D6; --rule:#24467A; --tick:#3BB7DD;
+  --page:#08203F; --card:#0F2E57; --ink:#EEF2F8; --muted:#AFC0D6; --rule:#24467A; --tick:#3BB7DD; --tint:#12365F;
 }
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:border-box}
@@ -71,7 +71,15 @@ a{color:inherit}
 section.block{padding:2.75rem 0 0}
 .block > h2{font-size:1.9rem;line-height:1.05;font-weight:800;margin:0 0 .5rem}
 .lede{color:var(--muted);margin:0 0 1.25rem}
-.moment{border-top:2px solid var(--rule);padding:1.5rem 0}
+.moment{background:var(--card);border:1px solid var(--rule);border-radius:1.25rem;padding:1.25rem 1.25rem 1.1rem;margin:0 0 .9rem}
+.pair{display:grid;grid-template-columns:1fr;gap:.6rem}
+@media (min-width:36rem){.pair{grid-template-columns:1fr 1fr}}
+.habit-box,.where-box{border-radius:.9rem;padding:.85rem 1rem;display:flex;flex-direction:column;gap:.2rem}
+.habit-box{background:var(--tint)}
+.where-box{border:1px solid var(--rule)}
+.habit-box span,.where-box span{color:var(--muted);font-size:.85rem;font-weight:600}
+.habit-box strong{font-size:1.15rem;line-height:1.25}
+.where-box p{margin:0}
 .moment .said{font-size:1.65rem;font-weight:800;line-height:1.1;margin:0 0 1rem;position:relative;padding-left:1.6rem}
 .moment .said::before{content:"\201C";position:absolute;left:0;top:-.35rem;font-size:3rem;line-height:1;color:var(--gold)}
 .moment dl{display:grid;grid-template-columns:1fr;gap:.75rem;margin:0}
@@ -107,7 +115,10 @@ section.block{padding:2.75rem 0 0}
 .feedback{border-top:2px solid var(--rule);margin-top:1.25rem}
 .btn-fb{display:inline-block;background:var(--navy);color:var(--on-navy);font-weight:800;text-decoration:none;padding:.9rem 1.25rem;border-radius:.75rem;border-bottom:4px solid var(--orange)}
 .btn-fb[aria-disabled="true"]{opacity:.6;cursor:default}
-.extras{list-style:none;margin:0;padding:0;display:grid;gap:.75rem}
+.jump{display:flex;gap:.5rem;overflow-x:auto;padding:1.1rem 0 .2rem;-webkit-overflow-scrolling:touch}
+.jump a{flex:none;white-space:nowrap;padding:.5rem .95rem;border-radius:999px;border:1px solid var(--rule);background:var(--card);text-decoration:none;font-weight:600;font-size:.92rem}
+.extras{list-style:none;margin:0;padding:0;display:grid;gap:.75rem;grid-template-columns:1fr}
+@media (min-width:40rem){.extras{grid-template-columns:1fr 1fr}.extras li{display:flex}.extras li > *{flex:1}}
 .extras a,.extras .x{display:block;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--gold);border-radius:.75rem;padding:1rem 1.1rem;text-decoration:none}
 .extras b{display:block;font-size:1.15rem;font-weight:800}
 .extras span{display:block;color:var(--muted);font-size:.95rem;margin-top:.2rem}
@@ -148,7 +159,7 @@ footer{color:var(--muted);font-size:.9rem;padding:2rem 0 2.5rem}
 </header>
 
 <main class="wrap">
-  <div class="check" aria-labelledby="check-title">
+  <div class="check" id="checklist" aria-labelledby="check-title">
     <div class="check-head">
       <h2 id="check-title">Weekly checklist</h2>
     </div>
@@ -158,30 +169,37 @@ footer{color:var(--muted);font-size:.9rem;padding:2rem 0 2.5rem}
     <button class="reset" type="button" id="reset">Clear this week's ticks</button>
   </div>
 
+  <nav class="jump" aria-label="Jump to a section">
+    <a href="#moments-title">Habits</a>
+    <a href="#tools-title">How-to guides</a>
+    <a href="#extras-title">Free tools</a>
+    <a href="#fb-title">Share ideas</a>
+  </nav>
+
   <section class="block" aria-labelledby="moments-title">
     <h2 id="moments-title">You might hear…</h2>
     <p class="lede">One habit for each, and the school tool that helps.</p>
 
     <article class="moment">
       <p class="said">I didn't know it was due.</p>
-      <dl>
-        <div><dt>The habit</dt><dd><strong>Check daily, plan weekly.</strong> A quick look at what's due each day, then plan it into the week.</dd></div>
-        <div><dt>Where it happens</dt><dd><a href="#tool-teams">Teams</a></dd></div>
-      </dl>
+      <div class="pair">
+        <div class="habit-box"><span>The habit</span><strong>Check daily, plan weekly.</strong></div>
+        <div class="where-box"><span>Where it happens</span><p><a href="#tool-teams">Teams</a>, where most subjects post work</p></div>
+      </div>
     </article>
     <article class="moment">
       <p class="said">I can't find my notes.</p>
-      <dl>
-        <div><dt>The habit</dt><dd><strong>Keep each subject in one place.</strong> No loose sheets or random folders.</dd></div>
-        <div><dt>Where it happens</dt><dd>Wherever each subject keeps its work: <a href="#tool-onenote">OneNote</a>, <a href="#tool-onedrive">OneDrive</a> or a paper jotter</dd></div>
-      </dl>
+      <div class="pair">
+        <div class="habit-box"><span>The habit</span><strong>Keep each subject in one place.</strong></div>
+        <div class="where-box"><span>Where it happens</span><p>OneNote, <a href="#tool-onedrive">OneDrive</a> or a paper jotter, depending on the subject</p></div>
+      </div>
     </article>
     <article class="moment">
       <p class="said">I don't know how to revise.</p>
-      <dl>
-        <div><dt>The habit</dt><dd><strong>Test yourself, don't just reread.</strong> Find the gaps, then work on them.</dd></div>
-        <div><dt>Where it happens</dt><dd><a href="#tool-achieve">Achieve</a></dd></div>
-      </dl>
+      <div class="pair">
+        <div class="habit-box"><span>The habit</span><strong>Test yourself, don't just reread.</strong></div>
+        <div class="where-box"><span>Where it happens</span><p><a href="#tool-achieve">Achieve</a>, online revision for N5 and Higher</p></div>
+      </div>
     </article>
   </section>
 
@@ -205,7 +223,7 @@ footer{color:var(--muted);font-size:.9rem;padding:2rem 0 2.5rem}
       <li><a href="https://www.understandingstandards.org.uk" target="_blank" rel="noopener" data-goatcounter-click="tool: SQA Understanding Standards"><b>SQA Understanding Standards</b><span>Real marked answers with examiner comments, so you can see what a good answer looks like.</span></a></li>
       <li><a href="https://to-do.office.com" target="_blank" rel="noopener" data-goatcounter-click="tool: Microsoft To Do"><b>Microsoft To Do</b><span>A simple study plan: list revision tasks by subject, tick them off, and use My Day to pick what to do today. Sign in with your school account.</span></a></li>
       <li><a href="https://pomofocus.io" target="_blank" rel="noopener" data-goatcounter-click="tool: Pomofocus"><b>Pomofocus</b><span>A study timer: 25 minutes of focus, then a 5-minute break. No account needed.</span></a></li>
-      <li><div class="x"><b>Immersive Reader</b><span>Built into Teams, OneNote and Outlook. Reads text aloud and makes pages easier to read, which is great for listening learners.</span></div></li>
+      <li><div class="x"><b>Immersive Reader</b><span>Built into Teams and other Microsoft apps. Reads text aloud and makes pages easier to read, which is great for listening learners.</span></div></li>
     </ul>
   </section>
 
@@ -223,13 +241,11 @@ footer{color:var(--muted);font-size:.9rem;padding:2rem 0 2.5rem}
 const FEEDBACK_LINK = "";
 const GOATCOUNTER_CODE = "";  // e.g. "dollarform3" from goatcounter.com      // e.g. a Microsoft Forms link
 const TOOLS = [
-  { id:"tool-teams", name:"Teams", what:"Where most subjects post work, deadlines and class updates, either as assignments or in the Class Notebook.",
+  { id:"tool-teams", name:"Teams", what:"Where most subjects post work, deadlines and class updates.",
     videos:[ {title:"Find what's due this week", url:"https://support.microsoft.com/en-us/education/turn-in-an-assignment-in-microsoft-teams"}, {title:"Add deadlines to your calendar", url:""}, {title:"Make a simple study plan in your calendar", url:""} ] },
   { id:"tool-outlook", name:"Outlook", what:"School email, calendar and to-do list. Messages from teachers arrive here, and the calendar is the place to plan the week: deadlines, clubs, sport and study time, all in one view.",
     tip:"Planning the week ahead takes a lot of last-minute pressure off.",
     videos:[ {title:"Plan your week in the calendar", url:""}, {title:"Make a to-do list", url:""}, {title:"Check school email on a phone", url:""} ] },
-  { id:"tool-onenote", name:"OneNote Class Notebook", what:"A digital jotter. Teachers share materials in the Content Library; pupils keep their own notes in their private Student Notebook.",
-    videos:[ {title:"Find class materials", url:""}, {title:"Add your own notes page", url:""} ] },
   { id:"tool-onedrive", name:"OneDrive", what:"Personal storage, so work is saved and can be opened on any device.",
     videos:[ {title:"Set up a folder for each subject", url:"https://support.microsoft.com/en-us/office/create-files-and-folders-in-onedrive-fdbf3345-e528-4ef8-97f9-4c1118a21379"}, {title:"Save and find your files", url:"https://support.microsoft.com/en-gb/office/manage-files-and-folders-in-onedrive-20d7bb65-425a-4209-9b71-4cad046cfdc8"} ] },
   { id:"tool-achieve", name:"Achieve", what:"Online revision for most N5 and Higher courses: learn a topic, rate your confidence, then test yourself.",
@@ -273,7 +289,9 @@ document.getElementById("reset").addEventListener("click",()=>{ticked=[];save(ti
 update();
 
 const tools=document.getElementById("tools");
-TOOLS.forEach(tl=>{
+TOOLS.forEach(tl0=>{
+  const tl=Object.assign({},tl0,{videos:tl0.videos.filter(v=>v.url)});
+  if(!tl.videos.length) return;
   const d=document.createElement("details"); d.className="tool"; d.id=tl.id;
   d.innerHTML='<summary><div><h3></h3><p></p></div><span class="chev" aria-hidden="true"></span></summary><div class="body"><p class="what"></p><ul class="videos"></ul></div>';
   d.querySelector("h3").textContent=tl.name;
@@ -294,6 +312,7 @@ TOOLS.forEach(tl=>{
 });
 function openFromHash(){const t=document.getElementById(location.hash.slice(1)); if(t&&t.tagName==="DETAILS"){t.open=true;}}
 window.addEventListener("hashchange",openFromHash); openFromHash();
+document.querySelectorAll('a[href^="#tool-"]').forEach(l=>{if(!document.getElementById(l.getAttribute("href").slice(1))){const s=document.createElement("span");s.textContent=l.textContent;l.replaceWith(s);}});
 
 const fb=document.getElementById("feedback-btn");
 if(FEEDBACK_LINK){fb.href=FEEDBACK_LINK;fb.target="_blank";fb.rel="noopener";} else {fb.removeAttribute("href");fb.setAttribute("aria-disabled","true");fb.textContent="Feedback form coming soon";}
