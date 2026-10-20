@@ -339,6 +339,19 @@ if(GOATCOUNTER_CODE){
   document.body.appendChild(s);
 }
 </script>
+
+<script>
+  document.addEventListener("change", function (e) {
+    var box = e.target;
+    if (!box.matches('input[type="checkbox"]') || !box.checked) return;
+    var item = box.closest("li, label, div");
+    var name = item ? item.textContent.trim().split("\n")[0].slice(0, 50) : "checklist item";
+    if (window.goatcounter && window.goatcounter.count) {
+      window.goatcounter.count({ path: "ticked: " + name, title: "Checklist tick", event: true });
+    }
+  });
+</script>
+</script>
   
 </body>
 </html>
